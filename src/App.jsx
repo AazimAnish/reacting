@@ -9,18 +9,24 @@ export default function App() {
 
   useEffect(() => {
     fetchFact();
+    fetchExcuse();
   }, []);
-
+  
+  const fetchExcuse = (category) => {
+    Axios.get(`https://excuser-three.vercel.app/v1/excuse/${category}`).then((res) => {
+      setExcuse(res.data[0].excuse);
+    });
+  }
   const fetchFact = () => {
     Axios.get("https://catfact.ninja/fact").then((res) => {
       setFact(res.data.fact);
     });
   } 
 
-
   const [toDoList, setToDoList] = useState([]);
   const [newTask, setNewTask] = useState("");
   const [fact, setFact] = useState("");
+  const [excuse, setExcuse] = useState("");
 
   const handleChange = (event) => {
     setNewTask(event.target.value);
@@ -56,7 +62,7 @@ export default function App() {
 
       </div>
 
-      <div className="p-4 flex flex-col gap-4">
+      <div className="p-4 grid grid-col gap-4">
         <Card>
           <CardBody>
             <p>{fact}</p>
@@ -65,6 +71,18 @@ export default function App() {
       </div>
       <Button className="text-tiny" variant="ghost" color="primary" radius="lg" onClick={fetchFact}>Next</Button>
 
+      <div className="p-4 grid grid-col gap-4">
+        <Card>
+          <CardBody>
+            <p>{excuse}</p>
+          </CardBody>
+        </Card>
+      </div>
+      <div className="grid grid-cols-10 ">
+  <Button className="text-tiny col-start-2 col-span-2" variant="ghost" color="primary" radius="lg" onClick={() => fetchExcuse('developers')}>Developer</Button>
+  <Button className="text-tiny col-start-5 col-span-2" variant="ghost" color="primary" radius="lg" onClick={() => fetchExcuse('family')}>Family</Button>
+  <Button className="text-tiny col-start-8 col-span-2" variant="ghost" color="primary" radius="lg" onClick={() => fetchExcuse('office')}>Office</Button>
+</div>
     </>
-  );
+  );8
 }
